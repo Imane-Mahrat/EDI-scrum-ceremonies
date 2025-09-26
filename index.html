@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Scrum Ceremonies for EDI Projects</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            padding: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #1a202c;
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #4a5568;
+            margin-bottom: 2rem;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.6);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #4a5568;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .ceremony-overview {
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .ceremony-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .ceremony-card {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .ceremony-card.completed {
+            background: rgba(229, 231, 235, 0.8);
+            color: #374151;
+        }
+
+        .ceremony-card:hover {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .ceremony-info {
+            flex: 1;
+        }
+
+        .ceremony-title {
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 0.25rem;
+        }
+
+        .ceremony-duration {
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+
+        .section {
+            margin-bottom: 1.5rem;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-header {
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+        }
+
+        .section-header:hover {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-title h2 {
+            font-size: 1.5rem;
+            color: #1a202c;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        .section-content {
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            display: none;
+        }
+
+        .section-content.expanded {
+            display: block;
+        }
+
+        .participants-bar {
+            background: rgba(249, 250, 251, 0.8);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(229, 231, 235, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .participants-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .participant-tag {
+            background: rgba(255, 255, 255, 0.6);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+
+        .content-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-card h4 {
+            font-size: 1.2rem;
+            color: #1a202c;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .question-card {
+            background: rgba(249, 250, 251, 0.8);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(229, 231, 235, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .question-card h5 {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .question-focus {
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .best-practices {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .practice-section h5 {
+            color: #374151;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .practice-list {
+            list-style: none;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .practice-list li {
+            margin-bottom: 0.25rem;
+        }
+
+        .retrospective-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .retro-column {
+            text-align: center;
+        }
+
+        .retro-column h6 {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .retro-list {
+            list-style: none;
+            color: #6b7280;
+            font-size: 0.8rem;
+        }
+
+        .retro-list li {
+            margin-bottom: 0.25rem;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(249, 250, 251, 0.8);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(229, 231, 235, 0.3);
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+        }
+
+        .chevron {
+            transition: transform 0.3s ease;
+        }
+
+        .chevron.rotated {
+            transform: rotate(90deg);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .badges {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .ceremony-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .best-practices {
+                grid-template-columns: 1fr;
+            }
+            
+            .retrospective-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="glass header">
+            <h1> Scrum Ceremonies for EDI Projects</h1>
+            <p>Master every Scrum ceremony with EDI-specific guidance, templates, and best practices</p>
+            <div class="badges">
+                <div class="badge">👥 For Scrum Masters</div>
+                <div class="badge">🎯 EDI Integration Teams</div>
+                <div class="badge">⚡ Orderful Projects</div>
+            </div>
+        </div>
+
+        <!-- Ceremony Overview -->
+        <div class="glass ceremony-overview">
+            <h2 style="margin-bottom: 1rem; color: #1a202c;">Ceremony Progress</h2>
+            <div class="ceremony-grid" id="ceremonyGrid">
+                <!-- Ceremony cards will be generated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Ceremony Sections -->
+        <div id="ceremoniesContainer">
+            <!-- Ceremonies will be generated by JavaScript -->
+        </div>
+
+        <!-- Footer -->
+        <div class="glass footer">
+            <p style="color: #6b7280;">
+                Great Scrum ceremonies create alignment, transparency, and continuous improvement. 
+                Every ceremony is an opportunity to strengthen your team!
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // State management
+        let expandedCeremonies = ['daily'];
+        let completedCeremonies = [];
+
+        // Data
+        const ceremonies = [
+            {
+                id: 'daily',
+                title: '☀️ Daily Scrum (Daily Standup)',
+                duration: '15 minutes',
+                participants: ['Scrum Master', 'Development Team', 'Product Owner (optional)'],
+                content: `
+                    <div class="content-card">
+                        <h4>🕐 Purpose & Goals</h4>
+                        <p style="color: #6b7280; margin-bottom: 1rem;">Synchronize the team, identify blockers, and plan the next 24 hours of EDI integration work.</p>
+                        <div style="background: rgba(249, 250, 251, 0.8); backdrop-filter: blur(4px); border: 1px solid rgba(229, 231, 235, 0.3); border-radius: 8px; padding: 1rem;">
+                            <h5 style="color: #374151; margin-bottom: 0.5rem;">EDI-Specific Focus</h5>
+                            <ul style="color: #6b7280; font-size: 0.9rem; margin-left: 1rem;">
+                                <li>• Client dependency status (production files, testing feedback)</li>
+                                <li>• 3PL coordination updates</li>
+                                <li>• Transaction testing progress (850, 855, 856, etc.)</li>
+                                <li>• Integration blockers and timeline impacts</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="content-card">
+                        <h4>The Three Questions (EDI Version)</h4>
+                        <div class="question-card">
+                            <h5>1. What EDI transactions did I complete yesterday?</h5>
+                            <div class="question-focus">Focus: 850 mapping, 855 logic, 856 testing, client calls, file validation</div>
+                        </div>
+                        <div class="question-card">
+                            <h5>2. What client testing or integration work am I doing today?</h5>
+                            <div class="question-focus">Focus: NetSuite configuration, 3PL coordination, client testing sessions</div>
+                        </div>
+                        <div class="question-card">
+                            <h5>3. Are there any blockers (waiting for production files, client responses, 3PL coordination)?</h5>
+                            <div class="question-focus">Focus: Production file delays, client response times, 3PL integration issues</div>
+                        </div>
+                    </div>
+                    <div class="content-card">
+                        <h4>Best Practices for EDI Teams</h4>
+                        <div class="best-practices">
+                            <div class="practice-section">
+                                <h5>Do's</h5>
+                                <ul class="practice-list">
+                                    <li>• Keep it time-boxed to 15 minutes</li>
+                                    <li>• Stand up (even in virtual meetings)</li>
+                                    <li>• Focus on progress toward sprint goal</li>
+                                    <li>• Mention specific trading partners</li>
+                                    <li>• Call out client dependencies clearly</li>
+                                </ul>
+                            </div>
+                            <div class="practice-section">
+                                <h5>Don'ts</h5>
+                                <ul class="practice-list">
+                                    <li>• Don't solve problems in the standup</li>
+                                    <li>• Don't give detailed technical explanations</li>
+                                    <li>• Don't turn it into a status report</li>
+                                    <li>• Don't skip when team members are remote</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 'planning',
+                title: '📋 Sprint Planning',
+                duration: '2-4 hours',
+                participants: ['Scrum Master', 'Development Team', 'Product Owner'],
+                content: `
+                    <div class="content-card">
+                        <h4>🎯 Sprint Planning for EDI Projects</h4>
+                        <div style="display: grid; gap: 1rem;">
+                            <div style="background: rgba(249, 250, 251, 0.8); backdrop-filter: blur(4px); border: 1px solid rgba(229, 231, 235, 0.3); border-radius: 8px; padding: 1rem;">
+                                <h5 style="color: #374151; font-weight: 600; margin-bottom: 0.5rem;">Part 1: What (1-2 hours)</h5>
+                                <p style="color: #6b7280; font-size: 0.9rem; margin-bottom: 0.75rem;">Select user stories and define sprint goal</p>
+                                <ul style="color: #6b7280; font-size: 0.9rem; margin-left: 1rem;">
+                                    <li>• Review prioritized backlog with Product Owner</li>
+                                    <li>• Consider client dependencies and timelines</li>
+                                    <li>• Account for production file availability</li>
+                                    <li>• Plan around client testing windows</li>
+                                    <li>• Set realistic sprint goal for trading partner</li>
+                                </ul>
+                            </div>
+                            <div style="background: rgba(249, 250, 251, 0.8); backdrop-filter: blur(4px); border: 1px solid rgba(229, 231, 235, 0.3); border-radius: 8px; padding: 1rem;">
+                                <h5 style="color: #374151; font-weight: 600; margin-bottom: 0.5rem;">Part 2: How (1-2 hours)</h5>
+                                <p style="color: #6b7280; font-size: 0.9rem; margin-bottom: 0.75rem;">Break down stories into tasks and estimate effort</p>
+                                <ul style="color: #6b7280; font-size: 0.9rem; margin-left: 1rem;">
+                                    <li>• Decompose EDI stories into technical tasks</li>
+                                    <li>• Identify dependencies on client/3PL</li>
+                                    <li>• Plan testing sequences (dev → client → integration)</li>
+                                    <li>• Estimate story points considering complexity</li>
+                                    <li>• Assign tasks based on expertise</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-card">
+                        <h4>EDI Sprint Planning Template</h4>
+                        <div style="background: rgba(249, 250, 251, 0.8); backdrop-filter: blur(4px); border: 1px solid rgba(229, 231, 235, 0.3); border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+                            <h5 style="color: #374151; margin-bottom: 0.5rem;">Sprint Goal Example</h5>
+                            <p style="color: #6b7280; font-size: 0.9rem; font-style: italic;">
+                                "Complete Kohl's 850 Purchase Order integration with store-level delivery mapping and begin 855 acknowledgment testing"
+                            </p>
+                        </div>
+                        <div style="background: rgba(249, 250, 251, 0.8); backdrop-filter: blur(4px); border: 1px solid rgba(229, 231, 235, 0.3); border-radius: 8px; padding: 1rem;">
+                            <h5 style="color: #374151; margin-bottom: 0.5rem;">Story Breakdown Example</h5>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span style="color: #374151; font-weight: 500;">850 Purchase Order Processing</span>
+                                <span style="color: #6b7280; font-size: 0.9rem;">8 points</span>
+                            </div>
+                            <ul style="color: #6b7280; font-size: 0.9rem; margin-left: 1rem;">
+                                <li>• Map SDQ segments to store destinations (3 pts)</li>
+                                <li>• Configure NetSuite field mapping (2 pts)</li>
+                                <li>• Set up validation rules (2 pts)</li>
+                                <li>• Client testing and feedback (1 pt)</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 'review',
+                title: '🎯 Sprint Review',
+                duration: '1-2 hours',
+                participants: ['Scrum Master', 'Development Team', 'Product Owner', 'Stakeholders'],
+                content: `
+                    <div class="content-card">
+                        <h4>📊 Showcase Completed Work</h4>
+                        <p style="color: #6b7280; margin-bottom: 1rem;">Demonstrate working EDI integrations and gather feedback from stakeholders.</p>
+                        <div style="background: rgba(249, 250, 251, 0.8); backdrop-filter: blur(4px); border: 1px solid rgba(229, 231, 235, 0.3); border-radius: 8px; padding: 1rem;">
+                            <h5 style="color: #374151; margin-bottom: 0.5rem;">EDI Demo Structure</h5>
+                            <ol style="color: #6b7280; font-size: 0.9rem; margin-left: 1rem;">
+                                <li>1. <strong>Show live transaction flow:</strong> 850 → NetSuite → 855 response</li>
+                                <li>2. <strong>Demonstrate field mapping:</strong> How TP data populates NetSuite</li>
+                                <li>3. <strong>Highlight business value:</strong> Time saved, accuracy improved</li>
+                                <li>4. <strong>Address edge cases:</strong> Error handling, validation rules</li>
+                                <li>5. <strong>Preview next sprint:</strong> Upcoming 856/810 work</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="content-card">
+                        <h4>Stakeholder Feedback Areas</h4>
+                        <div class="grid">
+                            <div>
+                                <h5 style="color: #374151; margin-bottom: 0.75rem;">Technical Feedback</h5>
+                                <ul style="color: #6b7280; font-size: 0.9rem; margin-left: 1rem;">
+                                    <li>• Data accuracy and completeness</li>
+                                    <li>• Performance and processing speed</li>
+                                    <li>• Error handling effectiveness</li>
+                                    <li>• Integration stability</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 style="color: #374151; margin-bottom: 0.75rem;">Business Feedback</h5>
+                                <ul style="color: #6b7280; font-size: 0.9rem; margin-left: 1rem;">
+                                    <li>• Workflow improvements</li>
+                                    <li>• Time savings achieved</li>
+                                    <li>• Additional requirements</li>
+                                    <li>• Priority adjustments</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 'retrospective',
+                title: '🔄 Sprint Retrospective',
+                duration: '1-1.5 hours',
+                participants: ['Scrum Master', 'Development Team'],
+                content: `
+                    <div class="content-card">
+                        <h4>🔄 Continuous Improvement</h4>
+                        <p style="color: #6b7280; margin-bottom: 1rem;">Reflect on the sprint process and identify improvements for EDI project delivery.</p>
+                        <div style="background: rgba(249, 250, 251, 0.8); backdrop-filter: blur(4px); border: 1px solid rgba(229, 231, 235, 0.3); border-radius: 8px; padding: 1rem;">
+                            <h5 style="color: #374151; margin-bottom: 0.5rem;">Classic Retrospective Format</h5>
+                            <div class="retrospective-grid">
+                                <div class="retro-column">
+                                    <h6>What Went Well? 😊</h6>
+                                    <ul class="retro-list">
+                                        <li>• Quick client responses</li>
+                                        <li>• Smooth 3PL coordination</li>
+                                        <li>• Clean production files</li>
+                                        <li>• Effective team collaboration</li>
+                                    </ul>
+                                </div>
+                                <div class="retro-column">
+                                    <h6>What Could Improve? 🤔</h6>
+                                    <ul class="retro-list">
+                                        <li>• Delayed file delivery</li>
+                                        <li>• Unclear requirements</li>
+                                        <li>• Testing environment issues</li>
+                                        <li>• Communication gaps</li>
+                                    </ul>
+                                </div>
+                                <div class="retro-column">
+                                    <h6>Action Items 🎯</h6>
+                                    <ul class="retro-list">
+                                        <li>• Set file delivery deadlines</li>
+                                        <li>• Create requirements template</li>
+                                        <li>• Improve test environment</li>
+                                        <li>• Schedule regular check-ins</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-card">
+                        <h4>EDI-Specific Retrospective Topics</h4>
+                        <div style="display: grid; gap: 0.75rem;">
+                            <div style="background: rgba(249, 250, 251, 0.8); backdrop-filter: blur(4px); border: 1px solid rgba(229, 231, 235, 0.3); border-radius: 8px; padding: 0.75rem;">
+                                <h5 style="color: #374151; margin-bottom: 0.25rem;">Client Collaboration</h5>
+                                <p style="color: #6b7280; font-size: 0.9rem;">How can we improve communication with clients and reduce response times?</p>
+                            </div>
+                            <div style="background: rgba(249, 250, 251, 0.8); backdrop-filter: blur(4px); border: 1px solid rgba(229, 231, 235, 0.3); border-radius: 8px; padding: 0.75rem;">
+                                <h5 style="color: #374151; margin-bottom: 0.25rem;">Technical Process</h5>
+                                <p style="color: #6b7280; font-size: 0.9rem;">What tools or processes would make EDI development more efficient?</p>
+                            </div>
+                            <div style="background: rgba(249, 250, 251, 0.8); backdrop-filter: blur(4px); border: 1px solid rgba(229, 231, 235, 0.3); border-radius: 8px; padding: 0.75rem;">
+                                <h5 style="color: #374151; margin-bottom: 0.25rem;">Quality & Testing</h5>
+                                <p style="color: #6b7280; font-size: 0.9rem;">How can we catch issues earlier and improve testing effectiveness?</p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 'refinement',
+                title: '🔍 Backlog Refinement',
+                duration: '1-2 hours',
+                participants: ['Scrum Master', 'Development Team', 'Product Owner'],
+                content: `
+                    <div class="content-card">
+                        <h4>📝 Prepare for Future Sprints</h4>
+                        <p style="color: #6b7280; margin-bottom: 1rem;">Refine user stories, estimate effort, and ensure the backlog is ready for upcoming sprints.</p>
+                        <div style="background: rgba(249, 250, 251, 0.8); backdrop-filter: blur(4px); border: 1px solid rgba(229, 231, 235, 0.3); border-radius: 8px; padding: 1rem;">
+                            <h5 style="color: #374151; margin-bottom: 0.5rem;">Refinement Activities</h5>
+                            <ul style="color: #6b7280; font-size: 0.9rem; margin-left: 1rem;">
+                                <li>• <strong>Story Decomposition:</strong> Break large epics into manageable stories</li>
+                                <li>• <strong>Acceptance Criteria:</strong> Define clear, testable requirements</li>
+                                <li>• <strong>Estimation:</strong> Assign story points based on complexity</li>
+                                <li>• <strong>Dependency Mapping:</strong> Identify client/3PL dependencies</li>
+                                <li>• <strong>Risk Assessment:</strong> Flag potential blockers or challenges</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="content-card">
+                        <h4>EDI Story Refinement Checklist</h4>
+                        <div style="display: grid; gap: 0.75rem;">
+                            ${[
+                                "Is the trading partner clearly identified?",
+                                "Are all required transaction types specified?",
+                                "Do we have production file samples?",
+                                "Are client testing requirements defined?",
+                                "Is 3PL coordination needed?",
+                                "Are custom field mappings documented?",
+                                "Is the acceptance criteria testable?",
+                                "Are dependencies on external parties noted?"
+                            ].map(item => `
+                                <div class="checklist-item">
+                                    <span style="color: #9ca3af;">○</span>
+                                    <span style="color: #374151; font-size: 0.9rem;">${item}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `
+            }
+        ];
+
+        // Functions
+        function toggleCeremony(ceremonyId) {
+            const index = expandedCeremonies.indexOf(ceremonyId);
+            if (index > -1) {
+                expandedCeremonies.splice(index, 1);
+            } else {
+                expandedCeremonies.push(ceremonyId);
+            }
+            renderCeremonies();
+        }
+
+        function toggleCompletion(ceremonyId) {
+            const index = completedCeremonies.indexOf(ceremonyId);
+            if (index > -1) {
