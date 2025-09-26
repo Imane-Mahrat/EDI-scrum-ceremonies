@@ -661,4 +661,78 @@
 
         function toggleCompletion(ceremonyId) {
             const index = completedCeremonies.indexOf(ceremonyId);
-            if (index > -1) {
+                        if (index > -1) {
+                completedCeremonies.splice(index, 1);
+            } else {
+                completedCeremonies.push(ceremonyId);
+            }
+            renderOverview();
+            renderCeremonies();
+        }
+
+        function renderOverview() {
+            const ceremonyGrid = document.getElementById('ceremonyGrid');
+            ceremonyGrid.innerHTML = ceremonies.map(ceremony => `
+                <div class="ceremony-card ${completedCeremonies.includes(ceremony.id) ? 'completed' : ''}" 
+                     onclick="toggleCompletion('${ceremony.id}')">
+                    <span>${completedCeremonies.includes(ceremony.id) ? '✓' : '○'}</span>
+                    <div class="ceremony-info">
+                        <div class="ceremony-title">${ceremony.title.replace(/☀️|📋|🎯|🔄|🔍/g, '').trim()}</div>
+                        <div class="ceremony-duration">${ceremony.duration}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderCeremonies() {
+            const container = document.getElementById('ceremoniesContainer');
+            container.innerHTML = ceremonies.map(ceremony => `
+                <div class="section glass">
+                    <div class="section-header" onclick="toggleCeremony('${ceremony.id}')">
+                        <div class="section-title">
+                            <h2>
+                                <span onclick="event.stopPropagation(); toggleCompletion('${ceremony.id}')" 
+                                      style="cursor: pointer; transition: transform 0.2s;">
+                                    ${completedCeremonies.includes(ceremony.id) ? '✓' : '○'}
+                                </span>
+                                ${ceremony.title}
+                            </h2>
+                            <span class="chevron ${expandedCeremonies.includes(ceremony.id) ? 'rotated' : ''}">
+                                ▶
+                            </span>
+                        </div>
+                        <div class="section-meta">
+                            <div style="display: flex; align-items: center; gap: 0.25rem;">
+                                <span>🕐</span>
+                                <span>${ceremony.duration}</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.25rem;">
+                                <span>👥</span>
+                                <span>${ceremony.participants.length} participants</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section-content ${expandedCeremonies.includes(ceremony.id) ? 'expanded' : ''}">
+                        <div class="participants-bar">
+                            <h4 style="color: #374151; margin-bottom: 0.5rem; font-weight: 600;">Participants</h4>
+                            <div class="participants-list">
+                                ${ceremony.participants.map(participant => `
+                                    <span class="participant-tag">${participant}</span>
+                                `).join('')}
+                            </div>
+                        </div>
+                        ${ceremony.content}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderOverview();
+            renderCeremonies();
+        });
+    </script>
+</body>
+</html>
+
